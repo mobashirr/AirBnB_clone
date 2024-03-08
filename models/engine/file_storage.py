@@ -1,3 +1,4 @@
+
 import json
 import os
 
@@ -26,10 +27,12 @@ class FileStorage:
         if os.path.exists(self.__file_path):
             with open(self.__file_path, 'r') as f:
                 data = json.load(f)
-                for key, value in data.items():
-                    class_name, obj_id = key.split('.')
-                    cls = eval(class_name)
-                    self.__objects[key] = cls(**value)
+                if len(data) > 0:
+                    for key, value in data.items():
+                        
+                        class_name, obj_id = key.split('.')
+                        cls = eval(class_name)
+                        self.__objects[key] = cls(**value)
 
 # Test the FileStorage class
 
