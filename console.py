@@ -3,11 +3,8 @@ import sys
 
 class HBNBCommand(cmd.Cmd):
     """HBNBCommand class"""
-    def preloop(self):
-        # self.prompt = "(hbnb) "
-        print("Documented commands (type help <topic>):")
-        print("========================================")
-        print("EOF help quit\n")
+
+    prompt = "(hbnb) "
 
     def do_quit(self, arg):
         return True  # Returning True will exit the command loop
