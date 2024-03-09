@@ -23,7 +23,9 @@ class BaseModel:
                         setattr(self, key, value)
         else:
             self.id = str(uuid.uuid4())
-            self.created_at = self.updated_at = datetime.now()
+            custom_format = datetime.now.strftime("%Y-%m-%d %H:%M:%S")
+            self.created_at = self.updated_at = datetime.strptime(custom_format, "%Y-%m-%d %H:%M:%S").isoformat()
+
             storage.new(self)   # Add the new object to the storage
 
     def __str__(self):
@@ -42,7 +44,5 @@ class BaseModel:
 
     def to_dict(self):
         dict = self.__dict__
-        dict['created_at'] = dict['created_at'].strftime("%Y-%m-%dT%H:%M:%S.%f")
-        dict['updated_at'] = dict['updated_at'].strftime("%Y-%m-%dT%H:%M:%S.%f")
-        dict['__class__'] = self.__class__.__name__
+        # dict['__class__'] = self.__class__.__name__
         return dict
