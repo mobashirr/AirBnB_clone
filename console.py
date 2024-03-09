@@ -33,8 +33,5 @@ def noninteractive_mode():
     print("Running in non-interactive mode")
 
 if __name__ == '__main__':
-    if not sys.stdin.isatty():
-        noninteractive_mode()
-    else:
-        interactive_mode()
+    HBNBCommand().cmdloop()
 
