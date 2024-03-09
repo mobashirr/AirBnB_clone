@@ -1,21 +1,6 @@
 import json
 import os,sys
 
-def get_class():
-    # Get the path to the grandparent directory
-    current_script_dir = os.path.dirname(os.path.abspath(__file__))
-    parent_dir = os.path.dirname(current_script_dir)
-    grandparent_dir = os.path.dirname(parent_dir)
-    
-    # Add the grandparent directory to the Python path
-    sys.path.append(grandparent_dir)
-    
-    # Import the module containing BaseModel
-    import models
-    
-    # Return the BaseModel class
-    return models.BaseModel
-
 class FileStorage:
 
     def __init__(self) -> None:
@@ -47,7 +32,10 @@ class FileStorage:
                 with open(self.__file_path, 'r') as f:
                     deserialized_objs = json.load(f)
                     for key, data in deserialized_objs.items():
-                        self.__objects[key] = data
+                        if not isinstance(data, BaseModel):
+                            self.__objects[key] = BaseModel(**data)
+                        else:
+                            self.__objects[key] = BaseModel(**data)
             except json.decoder.JSONDecodeError as e:
                 print("Error decoding JSON:", e)
 
