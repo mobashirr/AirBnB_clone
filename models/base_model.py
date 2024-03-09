@@ -2,14 +2,13 @@
 
 import uuid
 from datetime import datetime
-from models import storage
-
+# from models import storage
+from . import storage
 
 class BaseModel:
 
     def __init__(self, *args, **kwargs):
-        if kwargs:  # If kwargs is not empty
-            # Iterate over each key-value pair in kwargs
+        if kwargs:
             for key, value in kwargs.items():
                 # Check if the key is not '__class__'
                 if key != '__class__':
@@ -19,23 +18,31 @@ class BaseModel:
                         if isinstance(value, datetime):
                             setattr(self, key, value)
                         else:
-                            setattr(self, key, datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f'))
+                            setattr(self, key, datetime.fromisoformat(value))
                     else:
                         setattr(self, key, value)
-        else:  # If kwargs is empty
-            # Create id and created_at attributes
+        else:
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.now()
-            storage.new(self)
+            storage.new(self)   # Add the new object to the storage
 
     def __str__(self):
-        return f"[{self.__class__.__name__ }] (<{self.id}>) <{self.__dict__}>"
+        return f"[{self.__class__.__name__ }] ({self.id}) {self.__dict__}"
 
     def save(self):
-        storage.save()  # Save the current state of the storage
-        self.update_at = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        try:
+            pass
+        except AttributeError:
+            for key,value in storage.__objects.items():
+                if not isinstance(value,BaseModel):
+                    storage.__objects[key] = BaseModel(**value)
+        finally:
+            storage.save()  # Save the current state of the storage
+            self.updated_at = datetime.now()
 
     def to_dict(self):
         dict = self.__dict__
-        dict['__class__'] = self.__class__.__name__  
+        dict['created_at'] = dict['created_at'].strftime("%Y-%m-%dT%H:%M:%S.%f")
+        dict['updated_at'] = dict['updated_at'].strftime("%Y-%m-%dT%H:%M:%S.%f")
+        dict['__class__'] = self.__class__.__name__
         return dict
