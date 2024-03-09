@@ -1,5 +1,4 @@
 import cmd
-import sys
 
 class HBNBCommand(cmd.Cmd):
     """HBNBCommand class"""
@@ -21,14 +20,5 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         pass
 
-def interactive_mode():
-    HBNBCommand.prompt = "(hbnb) "
-    HBNBCommand().cmdloop()
-
-def noninteractive_mode():
-    HBNBCommand.prompt = "$ "
-    print("Running in non-interactive mode")
-
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
-
