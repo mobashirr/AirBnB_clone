@@ -1,13 +1,8 @@
 import cmd
 import sys
 
-class MyCmd(cmd.Cmd):
-
-    def do_help(self, arg):
-        print("Documented commands (type help <topic>):")
-        print("========================================")
-        print("EOF help quit\n")
-
+class HBNBCommand(cmd.Cmd):
+    """HBNBCommand class"""
     def preloop(self):
         # self.prompt = "(hbnb) "
         print("Documented commands (type help <topic>):")
@@ -20,13 +15,21 @@ class MyCmd(cmd.Cmd):
     def do_EOF(self, arg):
         pass
 
+    def help_EOF(self):
+        print("EOF command to exit the program")
+
+    def help_quit(self):
+        print("Quit command to exit the program")
+
+    def emptyline(self):
+        pass
 
 def interactive_mode():
-    MyCmd.prompt = "hbnb "
-    MyCmd().cmdloop()
+    HBNBCommand.prompt = "(hbnb) "
+    HBNBCommand().cmdloop()
 
 def noninteractive_mode():
-    MyCmd.prompt = "$ "
+    HBNBCommand.prompt = "$ "
     print("Running in non-interactive mode")
 
 if __name__ == '__main__':
