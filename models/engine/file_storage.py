@@ -1,3 +1,4 @@
+import datetime
 import json
 import os,sys
 
@@ -34,9 +35,14 @@ class FileStorage:
                     for key, data in deserialized_objs.items():
                         if not isinstance(data, BaseModel):
                             self.__objects[key] = BaseModel(**data)
+                            if key in ["created_at", "updated_at"]:
+                                conv = datetime.strptime(self.__objects[key], "%Y-%m-%dT%H:%M:%S.%f")
+                                self.__objects[key] = conv
                         else:
+                            if key in ["created_at", "updated_at"]:
+                                conv = datetime.strptime(self.__objects[key], "%Y-%m-%dT%H:%M:%S.%f")
+                                self.__objects[key] = conv
                             self.__objects[key] = BaseModel(**data)
             except json.decoder.JSONDecodeError as e:
                 print("Error decoding JSON:", e)
 
-# Test the FileStorage class

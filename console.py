@@ -18,15 +18,9 @@ class HBNBCommand(cmd.Cmd):
         if not arg:
             print("** class name missing **")
             return
+        if arg == "BaseModel":
+            new = BaseModel()
 
-        class_name = arg.split()[0]
-        if class_name not in storage.classes():
-            print("** class doesn't exist **")
-            return
-
-        new_instance = storage.classes()[class_name]()
-        new_instance.save()
-        print(new_instance.id)
 
     def do_show(self, arg):
         """Prints the string representation of an instance."""
