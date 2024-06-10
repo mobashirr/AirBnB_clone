@@ -116,7 +116,6 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, arg):
         """Handle the EOF signal to exit the console"""
-        print()  # Print a newline for better display
         return True
 
     def emptyline(self):
