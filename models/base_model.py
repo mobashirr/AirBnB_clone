@@ -6,8 +6,7 @@ the BASE CLASS
 
 
 import uuid, datetime
-# from models import storage
-# from . import storage
+import models
 
 
 class BaseModel:
@@ -26,6 +25,7 @@ class BaseModel:
         been updated.
         """
         if kwargs:
+            ''' Initiating using dic'''
             for key, value in kwargs.items():
                 if key != "__class__":
                     if key in ["created_at", "updated_at"]:
@@ -36,6 +36,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.datetime.now()
             self.updated_at = datetime.datetime.now()
+            models.storage.new(self)    # save the new instance to FileStorage class
     
 
     def __str__(self):
@@ -43,6 +44,7 @@ class BaseModel:
 
     def save(self):
         self.updated_at = datetime.datetime.now()
+        models.storage.save()   # use the storage variable to save to the file
 
     def to_dict(self):
         """

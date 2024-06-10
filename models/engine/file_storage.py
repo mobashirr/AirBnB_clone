@@ -1,12 +1,18 @@
+'''
+sereliztion and deserelization process
+'''
+
+
 import datetime
 import json
 import os,sys
 
-class FileStorage:
 
-    def __init__(self) -> None:
-        self.__file_path = "file.json"
-        self.__objects = {}
+class FileStorage:
+    ''''''
+
+    __file_path = "file.json"
+    __objects = {}
 
     def all(self):
         return self.__objects
@@ -16,15 +22,12 @@ class FileStorage:
         self.__objects[key] = obj
 
     def save(self):
-        serialized_objs = {}
+        obj_dict = {}
         for key, obj in self.__objects.items():
-            try:
-                serialized_objs[key] = obj.to_dict()
-            except AttributeError as e:
-                print(f"Error serializing object {obj}: {e}")
+            obj_dict[key] = obj.to_dict()
 
-        with open(self.__file_path, 'w') as f:
-            json.dump(serialized_objs, f)
+        with open(self.__file_path, 'w') as file:
+            json.dump(obj_dict, file)
 
     def reload(self):
         if os.path.exists(self.__file_path) and os.path.getsize(self.__file_path) != 0:
@@ -37,4 +40,3 @@ class FileStorage:
                             self.__objects[key] = BaseModel(**data)
             except json.decoder.JSONDecodeError as e:
                 print("Error decoding JSON:", e)
-
