@@ -7,10 +7,14 @@ class MyClass:
     def __init__(self, name, age):
         self.name = name
         self.age = age
-        print(type(MyClass.__dict__))
 
 # Creating an instance
 obj = MyClass("Alice", 30)
+
+from models.base_model import BaseModel
+
+bm = BaseModel()
+print(type(bm.id))
 
 # Attempting to access __dict__ will raise an AttributeError
 # print(obj.__dict__)  # This will raise an AttributeError
