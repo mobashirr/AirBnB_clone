@@ -1,49 +1,47 @@
 #!/usr/bin/python3
 
+'''
+the BASE CLASS
+'''
+
+
 import uuid
 from datetime import datetime
 # from models import storage
-from . import storage
+# from . import storage
+
 
 class BaseModel:
+    """
+        Initiating an instance...
 
-    def __init__(self, *args, **kwargs):
-        if kwargs:
-            for key, value in kwargs.items():
-                # Check if the key is not '__class__'
-                if key != '__class__':
-                    # If the key is 'created_at' or 'updated_at', convert the value to a datetime object
-                    if key in ['created_at', 'updated_at']:
-                        # Check if the value is already a datetime object
-                        if isinstance(value, datetime):
-                            setattr(self, key, value)
-                        else:
-                            setattr(self, key, datetime.fromisoformat(value))
-                    else:
-                        setattr(self, key, value)
-        else:
-            self.id = str(uuid.uuid4())
-            ob = datetime.now()
-            self.created_at = self.updated_at = ob.isoformat()
-            print(type(self.created_at))
-            storage.new(self)   # Add the new object to the storage
+        id: a uniqe identifier of the instance
+
+        created_at: date of the instance in which it has
+        been created.
+
+        updated_at: date of the instance in which it has
+        been updated.
+    """
+
+    def __init__(self):
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.datetime.now()
+        self.updated_at = datetime.datetime.now()
 
     def __str__(self):
         return f"[{self.__class__.__name__ }] ({self.id}) {self.__dict__}"
 
     def save(self):
-        try:
-            pass
-        except AttributeError:
-            for key,value in storage.__objects.items():
-                if not isinstance(value,BaseModel):
-                    storage.__objects[key] = BaseModel(**value)
-        finally:
-            storage.save()  # Save the current state of the storage
-            ob = datetime.now()
-            self.updated_at = ob.isoformat()
+        self.updated_at = datetime.datetime.now()
 
     def to_dict(self):
-        dict = self.__dict__
-        # dict['__class__'] = self.__class__.__name__
-        return dict
+        """
+        Returns a dictionary of all keys and values
+        of __dict__
+        """
+        my_dict = self.__dict__.copy()
+        my_dict["__class__"] = type(self).__name__
+        my_dict["created_at"] = my_dict["created_at"].isoformat()
+        my_dict["updated_at"] = my_dict["updated_at"].isoformat()
+        return my_dict

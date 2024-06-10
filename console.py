@@ -1,4 +1,9 @@
-import cmd
+#!/usr/bin/env python3
+
+'''console module'''
+
+
+import cmd,sys
 from models.base_model import BaseModel
 from models import storage
 
@@ -13,6 +18,7 @@ class HBNBCommand(cmd.Cmd):
 
     def help_quit(self):
         print("Quit command to exit the program")
+
     def do_create(self, arg):
         """Create a new instance of BaseModel, save it, and print the id."""
         if not arg:
@@ -20,7 +26,6 @@ class HBNBCommand(cmd.Cmd):
             return
         if arg == "BaseModel":
             new = BaseModel()
-
 
     def do_show(self, arg):
         """Prints the string representation of an instance."""
@@ -111,7 +116,26 @@ class HBNBCommand(cmd.Cmd):
 
     def emptyline(self):
         """Called when an empty line is entered."""
-        pass
+        pass    # should override this method
+
+    def cmdloop(self, intro=None):
+        """Override cmdloop to support non-interactive mode"""
+        if not sys.stdin.isatty():
+            # Non-interactive mode
+            self.stdin = sys.stdin
+            self.use_rawinput = False
+            while True:
+                try:
+                    line = self.stdin.readline()
+                    if not line:
+                        break
+                    line = line.rstrip('\r\n')
+                    self.onecmd(line)
+                except EOFError:
+                    break
+        else:
+            # Interactive mode
+            super().cmdloop(intro)
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
