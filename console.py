@@ -50,7 +50,7 @@ class HBNBCommand(cmd.Cmd):
 
                 for user,object in all_users.items():
                     if key == user:
-                        print(f"class {key} is found")
+                        print(f"{object}")
                         return
                 print("** no instance found **")
                 return
@@ -58,27 +58,31 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
 
-
     def do_destroy(self, arg):
-        """Deletes an instance based on the class name and id."""
+        '''destroy an instance of a class'''
         args = arg.split()
         if len(args) == 0:
             print("** class name missing **")
             return
-        if args[0] not in storage.classes():
+        elif args[0] == "BaseModel":
+            if len(args) == 1:
+                print("** instance id missing **")
+                return
+            else:
+                all_users = storage.all()
+                key = "{}.{}".format(args[0], args[1])
+
+                for user,object in all_users.items():
+                    if key == user:
+                        del all_users[key]
+                        storage.save()
+                        return
+                print("** no instance found **")
+                return
+        else:
             print("** class doesn't exist **")
             return
-        if len(args) == 1:
-            print("** instance id missing **")
-            return
-        key = args[0] + '.' + args[1]
-        obj_dict = storage.all()
-        if key not in obj_dict:
-            print("** no instance found **")
-            return
-        del obj_dict[key]
-        storage.save()
-
+        
     def do_all(self, arg):
         """Prints all string representation of all instances."""
         obj_dict = storage.all()
@@ -97,7 +101,7 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 0:
             print("** class name missing **")
             return
-        if args[0] not in storage.classes():
+        if args[0] not in ["BaseModel"]:
             print("** class doesn't exist **")
             return
         if len(args) == 1:
@@ -117,7 +121,7 @@ class HBNBCommand(cmd.Cmd):
         instance = obj_dict[key]
         attr_name = args[2]
         attr_value = args[3]
-        if hasattr(instance, attr_name):
+        if True:
             try:
                 attr_value = eval(attr_value)
             except:
