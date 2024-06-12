@@ -5,7 +5,13 @@
 
 import cmd,sys
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
+
+classes = {
+    "BaseModel": BaseModel,
+    "User": User
+}
 
 class HBNBCommand(cmd.Cmd):
     """Simple command interpreter example."""
@@ -27,8 +33,8 @@ class HBNBCommand(cmd.Cmd):
         if not arg:
             print("** class name missing **")
             return
-        elif arg == "BaseModel":
-            new = BaseModel()
+        elif arg in classes:
+            new = classes[arg]()
             storage.new(new)    # save the new instance
             print(new.id)
         else:
@@ -40,7 +46,7 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 0:
             print("** class name missing **")
             return
-        elif args[0] == "BaseModel":
+        elif args[0] in classes:
             if len(args) == 1:
                 print("** instance id missing **")
                 return
@@ -64,7 +70,7 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 0:
             print("** class name missing **")
             return
-        elif args[0] == "BaseModel":
+        elif args[0] in classes:
             if len(args) == 1:
                 print("** instance id missing **")
                 return
@@ -101,7 +107,7 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 0:
             print("** class name missing **")
             return
-        if args[0] not in ["BaseModel"]:
+        if args[0] not in classes:
             print("** class doesn't exist **")
             return
         if len(args) == 1:

@@ -7,6 +7,12 @@ import datetime
 import json
 import os,sys
 from models.base_model import BaseModel
+from models.user import User
+
+classes = {
+    "BaseModel": BaseModel,
+    "User": User
+}
 
 
 class FileStorage:
@@ -21,7 +27,7 @@ class FileStorage:
     def new(self, obj):
         key = "{}.{}".format(type(obj).__name__, obj.id)
         self.__objects[key] = obj
-        self.save()
+
 
     def save(self):
         obj_dict = {}
@@ -39,8 +45,8 @@ class FileStorage:
                     deserialized_objs = json.load(f)
                     
                     for key, data in deserialized_objs.items():
-                        if '__class__' in data and data['__class__'] == 'BaseModel':
-                            self.__objects[key] = BaseModel(**data)
+                        if '__class__' in data and data['__class__'] in classes:
+                            self.__objects[key] = classes[data['__class__']](**data)
             except json.decoder.JSONDecodeError as e:
                 print("Error decoding JSON:", e)
             except Exception as e:
