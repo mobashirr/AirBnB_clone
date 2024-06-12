@@ -6,6 +6,7 @@ sereliztion and deserelization process
 import datetime
 import json
 import os,sys
+from models.base_model import BaseModel
 
 
 class FileStorage:
@@ -20,6 +21,7 @@ class FileStorage:
     def new(self, obj):
         key = "{}.{}".format(type(obj).__name__, obj.id)
         self.__objects[key] = obj
+        self.save()
 
     def save(self):
         obj_dict = {}
@@ -30,13 +32,16 @@ class FileStorage:
             json.dump(obj_dict, file)
 
     def reload(self):
+
         if os.path.exists(self.__file_path) and os.path.getsize(self.__file_path) != 0:
             try:
-                from models.base_model import BaseModel
                 with open(self.__file_path, 'r') as f:
                     deserialized_objs = json.load(f)
+                    
                     for key, data in deserialized_objs.items():
-                        if not isinstance(data, BaseModel):
+                        if '__class__' in data and data['__class__'] == 'BaseModel':
                             self.__objects[key] = BaseModel(**data)
             except json.decoder.JSONDecodeError as e:
                 print("Error decoding JSON:", e)
+            except Exception as e:
+                print("An error occurred:", e)

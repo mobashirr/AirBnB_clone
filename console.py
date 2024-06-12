@@ -12,6 +12,9 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) '
 
+    def preloop(self):
+        storage.reload()
+
     def do_quit(self, arg):
         """Quit command to exit the program"""
         return True
@@ -26,7 +29,7 @@ class HBNBCommand(cmd.Cmd):
             return
         elif arg == "BaseModel":
             new = BaseModel()
-            storage.new(new)
+            storage.new(new)    # save the new instance
             print(new.id)
         else:
             print("** class doesn't exist **")
@@ -37,18 +40,24 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 0:
             print("** class name missing **")
             return
-        if args[0] not in storage.classes():
+        elif args[0] == "BaseModel":
+            if len(args) == 1:
+                print("** instance id missing **")
+                return
+            else:
+                all_users = storage.all()
+                key = "{}.{}".format(args[0], args[1])
+
+                for user,object in all_users.items():
+                    if key == user:
+                        print(f"class {key} is found")
+                        return
+                print("** no instance found **")
+                return
+        else:
             print("** class doesn't exist **")
             return
-        if len(args) == 1:
-            print("** instance id missing **")
-            return
-        key = args[0] + '.' + args[1]
-        obj_dict = storage.all()
-        if key not in obj_dict:
-            print("** no instance found **")
-            return
-        print(obj_dict[key])
+
 
     def do_destroy(self, arg):
         """Deletes an instance based on the class name and id."""
