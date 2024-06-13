@@ -29,8 +29,8 @@ cd AirBnB_clone
 ```
 
 ### Usage
-## Starting the Console
-## To start the console, run:
+- Starting the Console
+- To start the console, run:
 
 ```
 ./console.py
