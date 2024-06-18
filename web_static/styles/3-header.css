@@ -1,0 +1,17 @@
+/* styles/3-header.css */
+
+header {
+    background-color: #FFFFFF;
+    height: 70px;
+    width: 100%;
+    border-bottom: 1px solid #CCCCCC;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+header .logo {
+    height: 40px;
+    width: auto;
+}
