@@ -30,12 +30,20 @@ class FileStorage:
     '''
      __file_path: the path to database file
      __obects: is the variable contain the data in form of key and the value of that key as  object
-     
+
     '''
 
     __file_path = "file.json"
     __objects = {}
-
+    classes = {
+    "BaseModel": BaseModel,
+    "User": User,
+    "State": State,
+    "Review": Review,
+    "City": City,
+    "Amenity": Amenity,
+    "Place": Place
+    }
     def all(self):
         return self.__objects
 

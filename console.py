@@ -110,7 +110,7 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 0:
             print([str(obj_dict[key]) for key in obj_dict])
             return
-        if args[0] not in storage.classes():
+        if args[0] not in storage.classes.keys():
             print("** class doesn't exist **")
             return
         print([str(obj_dict[key]) for key in obj_dict if key.startswith(args[0])])
