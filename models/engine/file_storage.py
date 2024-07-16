@@ -44,6 +44,7 @@ class FileStorage:
     "Amenity": Amenity,
     "Place": Place
     }
+
     def all(self):
         return self.__objects
 
