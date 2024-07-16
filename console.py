@@ -25,28 +25,31 @@ classes = {
 }
 
 class HBNBCommand(cmd.Cmd):
-    """Simple command interpreter example."""
+    """Simple command interpreter example using the HBNBcommand module:"""
 
     prompt = '(hbnb) '
 
     def preloop(self):
+        '''
+        this method run when the console start
+        ensure restoring the data from database file
+        '''
         storage.reload()
 
     def do_quit(self, arg):
         """Quit command to exit the program"""
         return True
 
-    def help_quit(self):
-        print("Quit command to exit the program")
-
     def do_create(self, arg):
-        """Create a new instance of BaseModel, save it, and print the id."""
+        """Create a new instance of choosen class, save it, and print the id."""
         if not arg:
             print("** class name missing **")
             return
         elif arg in classes:
-            new = classes[arg]()
-            storage.new(new)    # save the new instance
+            # if the class name is valid:
+            new = classes[arg]() # create instance of that calss
+            storage.new(new)    # save the new instance in storage class
+            storage.save()      # save it to the database file
             print(new.id)
         else:
             print("** class doesn't exist **")
@@ -91,8 +94,8 @@ class HBNBCommand(cmd.Cmd):
 
                 for user,object in all_users.items():
                     if key == user:
-                        del all_users[key]
-                        storage.save()
+                        del all_users[key] # delete the user from the storage class
+                        storage.save()     # apply the changes to the database file
                         return
                 print("** no instance found **")
                 return
@@ -118,23 +121,31 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 0:
             print("** class name missing **")
             return
+
         if args[0] not in classes:
             print("** class doesn't exist **")
             return
+
         if len(args) == 1:
             print("** instance id missing **")
             return
-        key = args[0] + '.' + args[1]
-        obj_dict = storage.all()
+
+        key = args[0] + '.' + args[1] # get the key format to get the user from the storage var
+        obj_dict = storage.all() # get all user
+
         if key not in obj_dict:
+            ''' if the instance is not in the database:'''
             print("** no instance found **")
             return
+
         if len(args) == 2:
             print("** attribute name missing **")
             return
+
         if len(args) == 3:
             print("** value missing **")
             return
+
         instance = obj_dict[key]
         attr_name = args[2]
         attr_value = args[3]
@@ -154,7 +165,7 @@ class HBNBCommand(cmd.Cmd):
 
     def emptyline(self):
         """Called when an empty line is entered."""
-        pass    # should override this method
+        pass    # i override this method so that it won't do anything
 
     def cmdloop(self, intro=None):
         """Override cmdloop to support non-interactive mode"""

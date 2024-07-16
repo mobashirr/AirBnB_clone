@@ -11,7 +11,6 @@ import models
 
 class BaseModel:
 
-
     def __init__(self, *args, **kwargs):
         """
         Initiating an instance...
